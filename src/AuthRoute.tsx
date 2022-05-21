@@ -11,11 +11,11 @@ function AuthRoute({ type } : AuthRouteProps) {
     if(user){
       return <Outlet />
     } else {
-      return <Navigate to="/" replace />
+      return <Navigate to="/generate-phone-case/" replace />
     }
   } else {
     if(user) {
-      return <Navigate to="/home" replace />
+      return <Navigate to="/generate-phone-case/home" replace />
     } else {
       return <Outlet />
     }

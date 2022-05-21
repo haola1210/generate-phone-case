@@ -17,7 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           <Route path="/" element={<AuthRoute type='public' />}>
             <Route index element={<Login />} />
           </Route>
-          <Route path='/*' element={<Navigate to="/" />} />
+          <Route path='/*' element={<Navigate to="/generate-phone-case/" />} />
         </Routes>
       </BrowserRouter>
     </UserContextProvider>
