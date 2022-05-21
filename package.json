@@ -2,7 +2,7 @@
   "name": "package.json",
   "private": true,
   "version": "0.0.0",
-  "homepage": "https://ngaosenpai.github.io",
+  "homepage": "https://ngaosenpai.github.io/generate-phone-case",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
