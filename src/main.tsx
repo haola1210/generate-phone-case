@@ -9,7 +9,7 @@ import Login from './Login'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
     <UserContextProvider>
-      <BrowserRouter>
+      <BrowserRouter basename='/generate-phone-case'>
         <Routes>
           <Route path="/home" element={<AuthRoute type='private' />}>
             <Route index element={<App />} />
