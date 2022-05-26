@@ -1,5 +1,7 @@
 import {
   ChangeEvent,
+  lazy,
+  Suspense,
   useCallback,
   useEffect,
   useRef,
@@ -9,11 +11,36 @@ import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
 // import { useScreenshot, createFileName } from 'use-react-screenshot'
 import domtoimage from "dom-to-image-more";
-import { Button, Input, Switch, Slider } from "@mui/material"
+import { Button, Input, Switch, Slider, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material"
 
 import { toBase64, ImageDataResolve } from './utils'
 import pct from '../src/assets/pct.png'
 import layer3 from "../src/assets/Layer_3.png"
+
+// const listLogo = () => {
+//   const path = 'src/assets/'
+//   const logos = [
+//     'dino',
+//   ]
+//   return logos.reduce((object : { [key in string] : any }, logo) => {
+//     import(`../${path}${logo}.svg`).then(module => object[logo] = module)
+//     return object
+//   }, {})
+// }
+
+// let listLg = listLogo();
+
+let choosenLogo : any;
+const importLogo = (logoName: LogoType) =>
+import(`../src/assets/${logoName}.svg`).then(module => choosenLogo = module.default)
+
+const Logo = ({ choosenName } : { choosenName : LogoType }) => {
+  if(!choosenLogo){
+    throw importLogo(choosenName)
+  } else {
+    return <img src={choosenLogo} className='logo' />
+  }
+}
 
 
 const download = (image : string, { name = "img", extension = "jpg" } = {}) => {
@@ -44,6 +71,8 @@ const handleChangeImage = (
   }
 };
 
+type LogoType = 'dino'
+
 
 function App() {
   const [image, setImage] = useState<null | string>(null);
@@ -51,6 +80,10 @@ function App() {
   const [zoom, setZoom] = useState(1);
   const [shouldShowBG, setShowBG] = useState(false);
   // const [bgImage, setBgImage] = useState<null | InstanceType<typeof Image>>(null)
+  const [logo, changeLogo] = useState<LogoType>('dino')
+  const handleChangeLogo = (event: SelectChangeEvent<LogoType>) => {
+    changeLogo(event.target.value as LogoType)
+  }
 
   const screenShotRef = useRef<HTMLDivElement | null>(null);
   // const [screenShot, takeScreenshot] = useScreenshot();
@@ -142,9 +175,14 @@ function App() {
             resourceData.data[i] = 0
           } else {
             resourceData.data[i] = 155
+            // change bg color
+            resourceData.data[i-3] -= 150
+            resourceData.data[i-2] -= 150
+            resourceData.data[i-1] -= 150
           }
         }
         targetCtx?.putImageData(resourceData, 0, 0);
+        
       }
 
     }
@@ -228,6 +266,17 @@ function App() {
         >
           generate combined image
         </Button>
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={logo}
+          label="Age"
+          onChange={handleChangeLogo}
+          size='small'
+        >
+          <MenuItem value={'dino'}>Dinotaku</MenuItem>
+        </Select>
 
         <Switch color="warning" onChange={handleShowBG} checked={shouldShowBG} />
         { 
@@ -269,6 +318,11 @@ function App() {
             <div className="dark1"></div>
             <div className="dark2"></div>
             <div className="light2"></div>
+            
+            <Suspense fallback={<div>Loading...</div>}>
+              <Logo choosenName={logo} />
+            </Suspense>
+              
           </div>
         </div>
         <div className="bg-container" >

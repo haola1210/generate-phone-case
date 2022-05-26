@@ -163,3 +163,13 @@ canvas.case-target {
 
   display: none;
 }
+.logo{
+  position: relative;
+  top: 75%;
+  left: 50%;
+  z-index: 1000;
+
+  border-radius: 20px;
+  background-color: white;
+  opacity: 0.8;
+}

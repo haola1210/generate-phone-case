@@ -1,6 +1,7 @@
 import React from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
 import { useUserContext } from './UserContext'
+import { BASE_NAME } from "./utils"
 type AuthRouteProps = {
   type: 'private' | 'public'
 }
@@ -11,11 +12,11 @@ function AuthRoute({ type } : AuthRouteProps) {
     if(user){
       return <Outlet />
     } else {
-      return <Navigate to="/generate-phone-case/" replace />
+      return <Navigate to={BASE_NAME + "/"} replace />
     }
   } else {
     if(user) {
-      return <Navigate to="/generate-phone-case/home" replace />
+      return <Navigate to={BASE_NAME + "/home"} replace />
     } else {
       return <Outlet />
     }

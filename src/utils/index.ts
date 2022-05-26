@@ -24,3 +24,5 @@ export const toBase64 = (file: File, w? : number, h?: number) => new Promise<Ima
     reader.onerror = (error) => reject(error);
   }
 );
+
+export const BASE_NAME = '/generate-phone-case'
