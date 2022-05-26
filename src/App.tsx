@@ -266,12 +266,12 @@ function App() {
         >
           generate combined image
         </Button>
-        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <InputLabel id="demo-simple-select-label">Logo</InputLabel>
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
           value={logo}
-          label="Age"
+          label="Logo"
           onChange={handleChangeLogo}
           size='small'
         >
@@ -282,9 +282,10 @@ function App() {
         { 
           shouldShowBG && <Input 
             type="file"
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
               e.target.files && storeImageBG(e.target.files[0])
-            }
+              e.target.value = ''
+            }}
           />
         }
         
@@ -301,6 +302,7 @@ function App() {
                   { name: 'sample-case', extension: 'png' }
                 )
                 takeScreenshot(prev => null)
+                setShowBG(prev => false)
               }
             }
           >
