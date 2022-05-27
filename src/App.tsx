@@ -11,7 +11,7 @@ import Cropper from "react-easy-crop";
 import { Point, Area } from "react-easy-crop/types";
 // import { useScreenshot, createFileName } from 'use-react-screenshot'
 import domtoimage from "dom-to-image-more";
-import { Button, Input, Switch, Slider, InputLabel, Select, MenuItem, SelectChangeEvent } from "@mui/material"
+import { Button, Input, Switch, Slider, InputLabel, Select, MenuItem, SelectChangeEvent, Typography } from "@mui/material"
 
 import { toBase64, ImageDataResolve } from './utils'
 import pct from '../src/assets/pct.png'
@@ -55,12 +55,17 @@ const download = (image : string, { name = "img", extension = "jpg" } = {}) => {
 
 const handleChangeImage = (
   set: React.Dispatch<React.SetStateAction<string | null>>,
+  setSize: React.Dispatch<React.SetStateAction<{ w: number; h: number;}>>,
   e: ChangeEvent<HTMLInputElement>,
   imgRef: React.MutableRefObject<HTMLImageElement | null>
 ) => {
   if (e.target.files && e.target.files[0]) {
     toBase64(e.target.files[0])
       .then((data: ImageDataResolve) => {
+        setSize({
+          w: data.image.width,
+          h: data.image.height
+        })
         imgRef.current = data.image;
         set(data.base64 as string)
       })
@@ -79,6 +84,10 @@ function App() {
   const [crop, setCrop] = useState<Point>({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
   const [shouldShowBG, setShowBG] = useState(false);
+  const [imageSize, setSize] = useState({
+    w: 0,
+    h: 0
+  })
   // const [bgImage, setBgImage] = useState<null | InstanceType<typeof Image>>(null)
   const [logo, changeLogo] = useState<LogoType>('dino')
   const handleChangeLogo = (event: SelectChangeEvent<LogoType>) => {
@@ -222,9 +231,12 @@ function App() {
       <Input
         type="file"
         onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          handleChangeImage(setImage, e, imgRef)
+          handleChangeImage(setImage, setSize, e, imgRef)
         }
       />
+      <Typography>
+        size: { !!imageSize.w && imageSize.w} x { !!imageSize.h && imageSize.h }
+      </Typography>
       <div className="crop-section">
         {image && (
           <Cropper
